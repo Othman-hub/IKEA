@@ -1,4 +1,4 @@
-﻿using IKEA.DAL.Models.Dapartments;
+﻿
 using IKEA.DAL.Models.Departments;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,8 +10,12 @@ using System.Threading.Tasks;
 
 namespace IKEA.DAL.Persistance.Data
 {
-    class ApplicationDbContext:DbContext
+    public class ApplicationDbContext:DbContext
     {
+        public ApplicationDbContext(DbContextOptions options):base(options)
+        {
+            
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
