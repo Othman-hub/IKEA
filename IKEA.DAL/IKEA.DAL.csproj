@@ -10,7 +10,6 @@
     <Folder Include="Persistance\Data\Configurations\" />
     <Folder Include="Persistance\Data\Migrations\" />
     <Folder Include="Persistance\Data\DataSeeds\" />
-    <Folder Include="Persistance\Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
