@@ -1,6 +1,6 @@
 using System.Diagnostics;
+using IKEA.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using IKEA.PL.Models;
 
 namespace IKEA.PL.Controllers;
 
@@ -28,4 +28,5 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
 }
