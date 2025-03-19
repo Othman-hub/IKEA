@@ -8,9 +8,12 @@ namespace IKEA.PL.Controllers
         private IDepartmentServices departmentServices;
         public DepartmentController(IDepartmentServices _departmentServices)
         => departmentServices = _departmentServices;
+        #region Index
         public IActionResult Index()
         {
-            return View();
+            var Dep = departmentServices.GetAllDepartments();
+            return View(Dep); 
         }
+        #endregion
     }
 }
