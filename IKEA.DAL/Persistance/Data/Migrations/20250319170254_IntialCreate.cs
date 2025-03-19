@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace IKEA.DAL.Persistence.Data.Migrations
+namespace IKEA.DAL.Persistance.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class DepartmentModule : Migration
+    public partial class IntialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,6 @@ namespace IKEA.DAL.Persistence.Data.Migrations
                     Name = table.Column<string>(type: "varchar(50)", nullable: false),
                     Code = table.Column<string>(type: "varchar(20)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MyProperty = table.Column<int>(type: "int", nullable: false),
                     CreationDate = table.Column<DateOnly>(type: "date", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
