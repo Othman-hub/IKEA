@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IKEA.DAL.Models.Departments
+namespace IKEA.BLL.Dto_s.Departments
 {
-    public class Department:ModelBase
+    public class CreatedDepartmenDto
     {
         public string Name { get; set; } = null!;
         public string Code { get; set; } = null!;
