@@ -21,7 +21,18 @@ namespace IKEA.PL.Controllers
         public IActionResult Index() => View(departmentServices.GetAllDepartments());
 
         #endregion
+        #region Details
+        [HttpGet]
+        public IActionResult Details(int? id)
+        {
+            if (id is null) return BadRequest();
+            var department = departmentServices.GetDepartmentById(id.Value);
+            if (department is null) return NotFound();
+            return View(department);       
+        } 
+        #endregion
 
+        #region Create
         [HttpGet]
         public IActionResult Create() => View();
 
@@ -46,7 +57,7 @@ namespace IKEA.PL.Controllers
                 logger.LogError(ex, ex.Message);
                 if (environment.IsDevelopment())
                 {
-                    ModelState.AddModelError(string.Empty,ex.Message);
+                    ModelState.AddModelError(string.Empty, ex.Message);
                     return View(departmenDto);
                 }
                 else
@@ -55,8 +66,9 @@ namespace IKEA.PL.Controllers
                     return View(departmenDto);
                 }
             }
-                
-        }
+
+        } 
+        #endregion
 
     }
 }
