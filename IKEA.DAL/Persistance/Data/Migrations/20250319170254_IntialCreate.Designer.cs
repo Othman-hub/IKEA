@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IKEA.DAL.Persistence.Data.Migrations
+namespace IKEA.DAL.Persistance.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250317182358_DepartmentModule")]
-    partial class DepartmentModule
+    [Migration("20250319170254_IntialCreate")]
+    partial class IntialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,9 +61,6 @@ namespace IKEA.DAL.Persistence.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
                         .HasComputedColumnSql("Getdate()");
-
-                    b.Property<int>("MyProperty")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
