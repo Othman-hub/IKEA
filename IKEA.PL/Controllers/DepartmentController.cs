@@ -6,16 +6,19 @@ namespace IKEA.PL.Controllers
 {
     public class DepartmentController : Controller
     {
+        #region Services - DI
         private readonly IDepartmentServices departmentServices;
         private readonly ILogger<DepartmentController> logger;
         private readonly IWebHostEnvironment environment;
 
-        public DepartmentController(IDepartmentServices _departmentServices,ILogger<DepartmentController> _logger,IWebHostEnvironment environment)
+        public DepartmentController(IDepartmentServices _departmentServices, ILogger<DepartmentController> _logger, IWebHostEnvironment environment)
         {
             departmentServices = _departmentServices;
             logger = _logger;
             this.environment = environment;
-        }
+        } 
+        #endregion
+
         #region Index
         [HttpGet]
         public IActionResult Index() => View(departmentServices.GetAllDepartments());
@@ -108,6 +111,36 @@ namespace IKEA.PL.Controllers
             }
             ModelState.AddModelError(string.Empty, Message);
             return View(departmentDto);
+        }
+        #endregion
+
+        #region Delete
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id is null) return BadRequest();
+            var department = departmentServices.GetDepartmentById(id.Value);
+            if (department is null) return NotFound();
+
+            return View(department);
+        }
+        [HttpPost]
+        public IActionResult Delete(int Did)
+        {
+            var Message = string.Empty;
+            try
+            {
+                var IsDeleted = departmentServices.DeleteDepartment(Did);
+                if (IsDeleted) return RedirectToAction(nameof(Index));
+                Message = "Department is not Deleted";
+            }
+            catch(Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                Message = environment.IsDevelopment() ? ex.Message : "An Error has been occured during delete the Department!";
+            }
+            ModelState.AddModelError(string.Empty, Message);
+            return RedirectToAction(nameof(Delete), new { id = Did });
         }
         #endregion
     }

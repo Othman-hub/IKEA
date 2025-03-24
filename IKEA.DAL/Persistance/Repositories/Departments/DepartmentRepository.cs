@@ -15,7 +15,7 @@ namespace IKEA.DAL.Persistance.Repositories.Departments
         public DepartmentRepository(ApplicationDbContext dbContext) => DbContext = dbContext;
 
         public IEnumerable<Department> GetAll(bool WithNoTracking = true)
-            => WithNoTracking ? DbContext.Departments.AsNoTracking().ToList() : DbContext.Departments.ToList();
+            => WithNoTracking ? DbContext.Departments.Where(D => !D.IsDeleted).AsNoTracking().ToList() : DbContext.Departments.Where(D => !D.IsDeleted).ToList();
 
         public Department? GetById(int id) => DbContext.Departments.Find(id);
 
@@ -31,7 +31,8 @@ namespace IKEA.DAL.Persistance.Repositories.Departments
         }
         public int Delete(Department department)
         {
-            DbContext.Departments.Remove(department);
+            department.IsDeleted = true;
+            DbContext.Departments.Update(department);
             return DbContext.SaveChanges();
         }
     }
