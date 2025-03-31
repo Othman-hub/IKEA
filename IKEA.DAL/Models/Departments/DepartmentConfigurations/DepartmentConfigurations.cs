@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IKEA.DAL.Models.Departments.DepartmentConfigurations
 {
-    class DepartmentConfigurations : IEntityTypeConfiguration<Department>
+    public class DepartmentConfigurations : IEntityTypeConfiguration<Department>
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
