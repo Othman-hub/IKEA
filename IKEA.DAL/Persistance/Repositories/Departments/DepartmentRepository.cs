@@ -1,5 +1,6 @@
 ﻿using IKEA.DAL.Models.Departments;
 using IKEA.DAL.Persistance.Data;
+using IKEA.DAL.Persistance.Repositories._Generic;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,30 +10,11 @@ using System.Threading.Tasks;
 
 namespace IKEA.DAL.Persistance.Repositories.Departments
 {
-    public class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : GenericRepository<Department>, IDepartmentRepository
     {
         private readonly ApplicationDbContext DbContext;
-        public DepartmentRepository(ApplicationDbContext dbContext) => DbContext = dbContext;
+        public DepartmentRepository(ApplicationDbContext dbContext):base(dbContext) => DbContext = dbContext;
 
-        public IEnumerable<Department> GetAll(bool WithNoTracking = true)
-            => WithNoTracking ? DbContext.Departments.AsNoTracking().ToList() : DbContext.Departments.ToList();
 
-        public Department? GetById(int id) => DbContext.Departments.Find(id);
-
-        public int Add(Department department)
-        {
-            DbContext.Departments.Add(department);
-            return DbContext.SaveChanges();
-        }
-        public int Update(Department department)
-        {
-            DbContext.Departments.Update(department);
-            return DbContext.SaveChanges();
-        }
-        public int Delete(Department department)
-        {
-            DbContext.Departments.Remove(department);
-            return DbContext.SaveChanges();
-        }
     }
 }
