@@ -65,5 +65,51 @@ namespace IKEA.PL.Controllers
             return View(employee);
         }
         #endregion
+
+        #region Update
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id is null) return BadRequest();
+            var employee = employeeServices.GetEmployeeById(id.Value);
+            if (employee is null) return NotFound();
+            var MappedEmployee = new UpdatedEmployeeDto()
+            {
+                Id = employee.Id,
+                Name = employee.Name,
+                Age = employee.Age,
+                Address = employee.Address,
+                HiringDate = employee.HiringDate,
+                Salary = employee.Salary,
+                Gender = employee.Gender,
+                EmployeeType = employee.EmployeeType,
+                IsActive = employee.IsActive,
+                Email = employee.Email,
+                PhoneNumber = employee.PhoneNumber
+            };
+            return View(MappedEmployee);
+        }
+        [HttpPost]
+        public IActionResult Edit(UpdatedEmployeeDto employeeDto)
+        {
+            if (!ModelState.IsValid) return View(employeeDto);
+            var Message = string.Empty;
+            try
+            {
+                var result = employeeServices.UpdateEmployee(employeeDto);
+                if (result > 0) return RedirectToAction(nameof(Index));
+                else Message = "Employee is Not Upbdated";
+
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+
+                Message = environment.IsDevelopment() ? ex.Message : "An Error Has been occurd during Ubdate the Employee!";
+            }
+            ModelState.AddModelError(string.Empty, Message);
+            return View(employeeDto);
+        }
+        #endregion
     }
 }
