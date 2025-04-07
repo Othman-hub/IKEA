@@ -1,4 +1,7 @@
-﻿using IKEA.BLL.Services.EmployeeServices;
+﻿using IKEA.BLL.Dto_s.Departments;
+using IKEA.BLL.Dto_s.Employees;
+using IKEA.BLL.Services.DepartmentServices;
+using IKEA.BLL.Services.EmployeeServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IKEA.PL.Controllers
@@ -17,10 +20,39 @@ namespace IKEA.PL.Controllers
             this.environment = environment;
         }
         #endregion
+
         #region Index
         [HttpGet]
         public IActionResult Index() =>
             View(employeeServices.GetAllEmployees());
+        #endregion
+
+        #region Create
+        [HttpGet]
+        public IActionResult Create() => View();
+
+        [HttpPost]
+        public IActionResult Create(CreatedEmployeeDto EmployeeDto)
+        {
+            if (!ModelState.IsValid)
+                return View(EmployeeDto);
+            string Message = string.Empty;
+            try
+            {
+                var Result = employeeServices.CreateEmployee(EmployeeDto);
+                if (Result > 0)
+                    return RedirectToAction(nameof(Index));
+                else
+                    Message = "Employee Is not Created";
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                Message = environment.IsDevelopment() ? ex.Message : "An Error Effect at the Creation Operator";
+            }
+            ModelState.AddModelError(string.Empty, Message);
+            return View(EmployeeDto);
+        }
         #endregion
     }
 }
