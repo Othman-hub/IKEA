@@ -32,6 +32,7 @@ namespace IKEA.PL.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreatedEmployeeDto EmployeeDto)
         {
             if (!ModelState.IsValid)
@@ -90,6 +91,7 @@ namespace IKEA.PL.Controllers
             return View(MappedEmployee);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(UpdatedEmployeeDto employeeDto)
         {
             if (!ModelState.IsValid) return View(employeeDto);
@@ -123,6 +125,7 @@ namespace IKEA.PL.Controllers
             return View(employee);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int EmpId)
         {
             var Message = string.Empty;
