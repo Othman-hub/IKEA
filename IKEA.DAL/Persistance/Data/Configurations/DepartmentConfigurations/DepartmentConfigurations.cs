@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using IKEA.DAL.Models.Departments;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IKEA.DAL.Models.Departments.DepartmentConfigurations
+namespace IKEA.DAL.Persistance.Data.Configurations.DepartmentConfigurations
 {
     public class DepartmentConfigurations : IEntityTypeConfiguration<Department>
     {
