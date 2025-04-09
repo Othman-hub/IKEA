@@ -85,7 +85,7 @@ namespace IKEA.PL.Controllers
                 EmployeeType = employee.EmployeeType,
                 IsActive = employee.IsActive,
                 Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber
+                PhoneNumber = employee.PhoneNumber 
             };
             return View(MappedEmployee);
         }
@@ -109,6 +109,36 @@ namespace IKEA.PL.Controllers
             }
             ModelState.AddModelError(string.Empty, Message);
             return View(employeeDto);
+        }
+        #endregion
+
+        #region Delete
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id is null) return BadRequest();
+            var employee = employeeServices.GetEmployeeById(id.Value);
+            if (employee is null) return NotFound();
+
+            return View(employee);
+        }
+        [HttpPost]
+        public IActionResult Delete(int EmpId)
+        {
+            var Message = string.Empty;
+            try
+            {
+                var IsDeleted = employeeServices.DeleteEmployee(EmpId);
+                if (IsDeleted) return RedirectToAction(nameof(Index));
+                Message = "Employee is not Deleted";
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                Message = environment.IsDevelopment() ? ex.Message : "An Error has been occured during delete the Employee!";
+            }
+            ModelState.AddModelError(string.Empty, Message);
+            return RedirectToAction(nameof(Delete), new { id = EmpId });
         }
         #endregion
     }
