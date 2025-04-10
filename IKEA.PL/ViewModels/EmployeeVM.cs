@@ -1,14 +1,9 @@
 ﻿using IKEA.DAL.Common.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IKEA.BLL.Dto_s.Employees
+namespace IKEA.PL.ViewModels
 {
-    public class UpdatedEmployeeDto
+    public class EmployeeVM
     {
         public int Id { get; set; }
         [MaxLength(50, ErrorMessage = "Max Length of Name is 50 Chars")]

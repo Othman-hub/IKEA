@@ -2,6 +2,7 @@
 using IKEA.BLL.Dto_s.Employees;
 using IKEA.BLL.Services.DepartmentServices;
 using IKEA.BLL.Services.EmployeeServices;
+using IKEA.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IKEA.PL.Controllers
@@ -33,14 +34,26 @@ namespace IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreatedEmployeeDto EmployeeDto)
+        public IActionResult Create(EmployeeVM employeeVM)
         {
             if (!ModelState.IsValid)
-                return View(EmployeeDto);
+                return View(employeeVM);
             string Message = string.Empty;
             try
             {
-                var Result = employeeServices.CreateEmployee(EmployeeDto);
+                var Result = employeeServices.CreateEmployee(new CreatedEmployeeDto()
+                {
+                    Name = employeeVM.Name,
+                    Age = employeeVM.Age,
+                    Address = employeeVM.Address,
+                    Salary = employeeVM.Salary,
+                    IsActive = employeeVM.IsActive,
+                    Email = employeeVM.Email,
+                    PhoneNumber = employeeVM.PhoneNumber,
+                    HiringDate = employeeVM.HiringDate,
+                    Gender = employeeVM.Gender,
+                    EmployeeType = employeeVM.EmployeeType
+                });
                 if (Result > 0)
                     return RedirectToAction(nameof(Index));
                 else
@@ -52,7 +65,7 @@ namespace IKEA.PL.Controllers
                 Message = environment.IsDevelopment() ? ex.Message : "An Error Effect at the Creation Operator";
             }
             ModelState.AddModelError(string.Empty, Message);
-            return View(EmployeeDto);
+            return View(employeeVM);
         }
         #endregion
 
@@ -74,7 +87,7 @@ namespace IKEA.PL.Controllers
             if (id is null) return BadRequest();
             var employee = employeeServices.GetEmployeeById(id.Value);
             if (employee is null) return NotFound();
-            var MappedEmployee = new UpdatedEmployeeDto()
+            var MappedEmployee = new EmployeeVM()
             {
                 Id = employee.Id,
                 Name = employee.Name,
@@ -92,13 +105,26 @@ namespace IKEA.PL.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(UpdatedEmployeeDto employeeDto)
+        public IActionResult Edit(EmployeeVM employeeVM)
         {
-            if (!ModelState.IsValid) return View(employeeDto);
+            if (!ModelState.IsValid) return View(employeeVM);
             var Message = string.Empty;
             try
             {
-                var result = employeeServices.UpdateEmployee(employeeDto);
+                var result = employeeServices.UpdateEmployee(new UpdatedEmployeeDto()
+                {
+                    Id = employeeVM.Id,
+                    Name = employeeVM.Name,
+                    Age = employeeVM.Age,
+                    Address = employeeVM.Address,
+                    Salary = employeeVM.Salary,
+                    IsActive = employeeVM.IsActive,
+                    Email = employeeVM.Email,
+                    PhoneNumber = employeeVM.PhoneNumber,
+                    HiringDate = employeeVM.HiringDate,
+                    Gender = employeeVM.Gender,
+                    EmployeeType = employeeVM.EmployeeType
+                });
                 if (result > 0) return RedirectToAction(nameof(Index));
                 else Message = "Employee is Not Upbdated";
 
@@ -110,7 +136,7 @@ namespace IKEA.PL.Controllers
                 Message = environment.IsDevelopment() ? ex.Message : "An Error Has been occurd during Ubdate the Employee!";
             }
             ModelState.AddModelError(string.Empty, Message);
-            return View(employeeDto);
+            return View(employeeVM);
         }
         #endregion
 
