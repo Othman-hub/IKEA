@@ -1,5 +1,7 @@
 ﻿using IKEA.BLL.Dto_s.Departments;
 using IKEA.BLL.Services.DepartmentServices;
+using IKEA.DAL.Models.Departments;
+using IKEA.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IKEA.PL.Controllers
@@ -42,35 +44,33 @@ namespace IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreatedDepartmenDto departmenDto)
+        public IActionResult Create(DepartmentVM departmentVM)
         {
             if (!ModelState.IsValid)
-                return View(departmenDto);
+                return View(departmentVM);
+            string Message = string.Empty;
             try
             {
-                var Result = departmentServices.CreateDepartment(departmenDto);
+                
+                var Result = departmentServices.CreateDepartment(new CreatedDepartmenDto()
+                {
+                    Name = departmentVM.Name,
+                    Code = departmentVM.Code,
+                    CreationDate = departmentVM.CreationDate,
+                    Description = departmentVM.Description,
+                });
                 if (Result > 0)
                     return RedirectToAction(nameof(Index));
                 else
-                {
-                    ModelState.AddModelError(string.Empty, "Department Is not Created");
-                    return View(departmenDto);
-                }
+                    Message = "Department Is not Created";
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);
-                if (environment.IsDevelopment())
-                {
-                    ModelState.AddModelError(string.Empty, ex.Message);
-                    return View(departmenDto);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "An Error Effect at the Creation Operator");
-                    return View(departmenDto);
-                }
+                    Message = environment.IsDevelopment() ? ex.Message: "An Error Effect at the Creation Operator";
             }
+            ModelState.AddModelError(string.Empty, Message);
+            return View(departmentVM);
 
         }
         #endregion
@@ -82,7 +82,7 @@ namespace IKEA.PL.Controllers
             if (id is null) return BadRequest();
             var department = departmentServices.GetDepartmentById(id.Value);
             if (department is null) return NotFound();
-            var MappedDepartment = new UpdatedDepartmentDto()
+            var MappedDepartment = new DepartmentVM()
             {
                 Id = department.Id,
                 Name = department.Name,
@@ -94,13 +94,20 @@ namespace IKEA.PL.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(UpdatedDepartmentDto departmentDto)
+        public IActionResult Edit(DepartmentVM departmentVM)
         {
-            if (!ModelState.IsValid) return View(departmentDto);
+            if (!ModelState.IsValid) return View(departmentVM);
             var Message = string.Empty;
             try
             {
-                var result = departmentServices.UpdateDepartment(departmentDto);
+                var result = departmentServices.UpdateDepartment(new UpdatedDepartmentDto()
+                {
+                    Id = departmentVM.Id,
+                    Name = departmentVM.Name,
+                    Code = departmentVM.Code,
+                    CreationDate = departmentVM.CreationDate,
+                    Description = departmentVM.Description,
+                });
                 if (result > 0) return RedirectToAction(nameof(Index));
                 else Message = "Department is Not Upbdated";
                 
@@ -112,7 +119,7 @@ namespace IKEA.PL.Controllers
                 Message = environment.IsDevelopment() ? ex.Message : "An Error Has been occurd during Ubdate the Department!";
             }
             ModelState.AddModelError(string.Empty, Message);
-            return View(departmentDto);
+            return View(departmentVM);
         }
         #endregion
 
