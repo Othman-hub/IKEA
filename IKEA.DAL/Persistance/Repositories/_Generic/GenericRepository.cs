@@ -15,8 +15,8 @@ namespace IKEA.DAL.Persistance.Repositories._Generic
         private readonly ApplicationDbContext DbContext;
         public GenericRepository(ApplicationDbContext dbContext) => DbContext = dbContext;
 
-        public IEnumerable<T> GetAll(bool WithNoTracking = true)
-            => WithNoTracking ? DbContext.Set<T>().Where(D => !D.IsDeleted).AsNoTracking().ToList() : DbContext.Set<T>().Where(D => !D.IsDeleted).ToList();
+        public IQueryable<T> GetAll(bool WithNoTracking = true)
+            => WithNoTracking ? DbContext.Set<T>().AsNoTracking() : DbContext.Set<T>();
 
         public T? GetById(int id) => DbContext.Set<T>().Find(id);
 

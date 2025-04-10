@@ -1,13 +1,16 @@
-﻿@model DepartmentVM
+﻿@model EmployeeVM
 @{
-    ViewData["Title"] = "Edit Department";
+    ViewData["Title"] = "Edit Employee";
 }
+
 <div class="row justify-content-center align-content-center flex-column">
-    <h1 class="col-6 my-4">Edit Department : @Model.Name</h1>
-    <form asp-action="Edit" method="post" class="col-6">
+
+    <h1 class="col-6 my-4">Edit Employee @Model.Name.</h1>
+    <form asp-action="Edit" method="post" class="row col-6">
         <partial name="Partials/_CreateEditePartial" model="@Model" />
+
         <div class="mt-4">
-            <input type="submit" value="Update" class="btn btn-success" /> |
+            <input type="submit" value="Update" class="btn btn-success" /> ||
             <a asp-action="Index" class="btn btn-secondary">Back To List</a>
         </div>
     </form>
@@ -17,3 +20,4 @@
 {
     <partial name="_ValidationScriptsPartial" />
 }
+
