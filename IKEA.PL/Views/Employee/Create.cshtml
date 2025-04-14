@@ -1,17 +1,19 @@
-﻿@model DepartmentVM
+﻿
+@model EmployeeVM
 @{
-    ViewData["Title"] = "Edit Department";
+    ViewData["Title"] = "Create Employee";
 }
+
 <div class="row justify-content-center align-content-center flex-column">
-    <h1 class="col-6 my-4">Edit Department : @Model.Name</h1>
-    <form asp-action="Edit" method="post" class="col-6">
+
+    <h1 class="col-6 my-4">Create New Employee</h1>
+    <form asp-action="Create" method="post" class="row col-6">
         <partial name="Partials/_CreateEditePartial" model="@Model" />
         <div class="mt-4">
-            <input type="submit" value="Update" class="btn btn-success" /> |
+            <input type="submit" value="Create" class="btn btn-primary" /> ||
             <a asp-action="Index" class="btn btn-secondary">Back To List</a>
         </div>
     </form>
-
 </div>
 @section ValidateScripts
 {
