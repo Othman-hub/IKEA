@@ -28,6 +28,10 @@ namespace IKEA.DAL.Persistance.Data.Configurations.EmployeeConfigurations
                 (type) => type.ToString(),
                 (type) => (EmployeeType)Enum.Parse(typeof(EmployeeType), type)
             );
+            builder.HasOne(E => E.Department)
+                   .WithMany(D => D.Employees)
+                   .HasForeignKey(E => E.DepartmentId)
+                   .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
