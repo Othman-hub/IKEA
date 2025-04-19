@@ -9,8 +9,8 @@ namespace IKEA.BLL.Services.EmployeeServices
     {
         private readonly IEmployeeRepositoris repository;
         public EmployeeServices(IEmployeeRepositoris employeeRepository) => repository = employeeRepository;
-        public IEnumerable<EmployeeDto> GetAllEmployees() =>
-            repository.GetAll().Where(E => !E.IsDeleted).Include(E => E.Department).Select(E => new EmployeeDto()
+        public IEnumerable<EmployeeDto> GetAllEmployees(string search) =>
+            repository.GetAll().Where(E => !E.IsDeleted &&  (string.IsNullOrEmpty(search) || E.Name.ToLower().Contains(search.ToLower()))).Include(E => E.Department).Select(E => new EmployeeDto()
             {
                 Id = E.Id,
                 Name = E.Name,
