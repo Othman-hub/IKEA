@@ -20,21 +20,21 @@ namespace IKEA.DAL.Persistance.Repositories._Generic
 
         public T? GetById(int id) => DbContext.Set<T>().Find(id);
 
-        public int Add(T entity)
+        public void Add(T entity)
         {
             DbContext.Set<T>().Add(entity);
-            return DbContext.SaveChanges();
+            
         }
-        public int Update(T entity)
+        public void Update(T entity)
         {
             DbContext.Set<T>().Update(entity);
-            return DbContext.SaveChanges();
+            
         }
-        public int Delete(T entity)
+        public void Delete(T entity)
         {
             entity.IsDeleted = true;
             DbContext.Set<T>().Update(entity);
-            return DbContext.SaveChanges();
+            
         }
     }
 }
