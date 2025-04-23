@@ -4,6 +4,8 @@ using IKEA.BLL.Services.EmployeeServices;
 using IKEA.DAL.Persistance.Data;
 using IKEA.DAL.Persistance.Repositories.Departments;
 using IKEA.DAL.Persistance.Repositories.Employees;
+using IKEA.DAL.Persistance.UnitOfWork;
+using IKEA.PL.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace IKEA.PL
@@ -18,12 +20,14 @@ namespace IKEA.PL
             #region Configure Service
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefualtConnection")));
+            options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefualtConnection")));
 
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IEmployeeRepositoris, EmployeeRepsitory>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
-            builder.Services.AddScoped<IEmployeeRepositoris, EmployeeRepsitory>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddAutoMapper(M => M.AddProfile(typeof(MappingProfile)));
 
             #endregion
 

@@ -1,4 +1,8 @@
 ﻿@model EmployeeVM
+@inject IDepartmentServices departmentServices
+@{
+    var Departments = new SelectList(departmentServices.GetAllDepartments(), nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+}
 <div asp-validation-summary="ModelOnly"></div>
 <div class="form-group  col-6">
     <label class="form-label" asp-for="Name"></label>
@@ -31,9 +35,15 @@
     <span class="text-danger" asp-validation-for="PhoneNumber"></span>
 </div>
 <div class="form-group  col-6">
-    <label class="form-label" asp-for="EmployeeType"></label>
+    <label asp-for="EmployeeType"></label>
     <select asp-for="EmployeeType" asp-items="Html.GetEnumSelectList<EmployeeType>()" class="form-control">
         <option value="">Choose...</option>
+    </select>
+</div>
+<div class="form-group  col-6">
+    <label asp-for="DepartmentId"></label>
+    <select asp-for="DepartmentId" asp-items="@Departments" class="form-control">
+        <option value="@null">Choose...</option>
     </select>
 </div>
 <div class="form-group  col-6">

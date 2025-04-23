@@ -14,7 +14,7 @@ namespace IKEA.PL.Controllers
         private readonly ILogger<EmployeeController> logger;
         private readonly IWebHostEnvironment environment;
 
-        public EmployeeController(IEmployeeServices employeeServices, ILogger<EmployeeController> logger, IWebHostEnvironment environment)
+        public EmployeeController(IEmployeeServices employeeServices,IDepartmentServices departmentServices, ILogger<EmployeeController> logger, IWebHostEnvironment environment)
         {
             this.employeeServices = employeeServices;
             this.logger = logger;
@@ -24,14 +24,14 @@ namespace IKEA.PL.Controllers
 
         #region Index
         [HttpGet]
-        public IActionResult Index() =>
-            View(employeeServices.GetAllEmployees());
+        public IActionResult Index(string search) =>
+            View(employeeServices.GetAllEmployees(search));
         #endregion
 
         #region Create
         [HttpGet]
-        public IActionResult Create() => View();
-
+        public IActionResult Create()
+        => View();
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(EmployeeVM employeeVM)
@@ -52,7 +52,8 @@ namespace IKEA.PL.Controllers
                     PhoneNumber = employeeVM.PhoneNumber,
                     HiringDate = employeeVM.HiringDate,
                     Gender = employeeVM.Gender,
-                    EmployeeType = employeeVM.EmployeeType
+                    EmployeeType = employeeVM.EmployeeType,
+                    DepartmentId = employeeVM.DepartmentId
                 });
                 if (Result > 0)
                     return RedirectToAction(nameof(Index));
@@ -99,8 +100,9 @@ namespace IKEA.PL.Controllers
                 EmployeeType = employee.EmployeeType,
                 IsActive = employee.IsActive,
                 Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber 
+                PhoneNumber = employee.PhoneNumber
             };
+            
             return View(MappedEmployee);
         }
         [HttpPost]
@@ -123,7 +125,8 @@ namespace IKEA.PL.Controllers
                     PhoneNumber = employeeVM.PhoneNumber,
                     HiringDate = employeeVM.HiringDate,
                     Gender = employeeVM.Gender,
-                    EmployeeType = employeeVM.EmployeeType
+                    EmployeeType = employeeVM.EmployeeType,
+                    DepartmentId = employeeVM.DepartmentId
                 });
                 if (result > 0) return RedirectToAction(nameof(Index));
                 else Message = "Employee is Not Upbdated";

@@ -1,4 +1,5 @@
 ﻿using IKEA.DAL.Common.Enums;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace IKEA.PL.ViewModels
@@ -25,5 +26,7 @@ namespace IKEA.PL.ViewModels
         public DateOnly HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
+        [Display(Name = "Department")]
+        public int? DepartmentId { get; set; }
     }
 }

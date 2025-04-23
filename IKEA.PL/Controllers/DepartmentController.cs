@@ -1,4 +1,5 @@
-﻿using IKEA.BLL.Dto_s.Departments;
+﻿using AutoMapper;
+using IKEA.BLL.Dto_s.Departments;
 using IKEA.BLL.Services.DepartmentServices;
 using IKEA.DAL.Models.Departments;
 using IKEA.PL.ViewModels;
@@ -10,12 +11,14 @@ namespace IKEA.PL.Controllers
     {
         #region Services - DI
         private readonly IDepartmentServices departmentServices;
+        private readonly IMapper mapper;
         private readonly ILogger<DepartmentController> logger;
         private readonly IWebHostEnvironment environment;
 
-        public DepartmentController(IDepartmentServices _departmentServices, ILogger<DepartmentController> _logger, IWebHostEnvironment environment)
+        public DepartmentController(IDepartmentServices _departmentServices,IMapper mapper, ILogger<DepartmentController> _logger, IWebHostEnvironment environment)
         {
             departmentServices = _departmentServices;
+            this.mapper = mapper;
             logger = _logger;
             this.environment = environment;
         } 
@@ -52,13 +55,7 @@ namespace IKEA.PL.Controllers
             try
             {
                 
-                var Result = departmentServices.CreateDepartment(new CreatedDepartmenDto()
-                {
-                    Name = departmentVM.Name,
-                    Code = departmentVM.Code,
-                    CreationDate = departmentVM.CreationDate,
-                    Description = departmentVM.Description,
-                });
+                var Result = departmentServices.CreateDepartment(mapper.Map<DepartmentVM,CreatedDepartmenDto>(departmentVM));
                 if (Result > 0)
                     return RedirectToAction(nameof(Index));
                 else
@@ -82,15 +79,15 @@ namespace IKEA.PL.Controllers
             if (id is null) return BadRequest();
             var department = departmentServices.GetDepartmentById(id.Value);
             if (department is null) return NotFound();
-            var MappedDepartment = new DepartmentVM()
-            {
-                Id = department.Id,
-                Name = department.Name,
-                Code = department.Code,
-                Description = department.Description,
-                CreationDate = department.CreationDate,
-            };
-            return View(MappedDepartment);
+            //var MappedDepartment = new DepartmentVM()
+            //{
+            //    Id = department.Id,
+            //    Name = department.Name,
+            //    Code = department.Code,
+            //    Description = department.Description,
+            //    CreationDate = department.CreationDate,
+            //};
+            return View(mapper.Map<DepartmentDetailsDto,DepartmentVM>(department));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -100,14 +97,7 @@ namespace IKEA.PL.Controllers
             var Message = string.Empty;
             try
             {
-                var result = departmentServices.UpdateDepartment(new UpdatedDepartmentDto()
-                {
-                    Id = departmentVM.Id,
-                    Name = departmentVM.Name,
-                    Code = departmentVM.Code,
-                    CreationDate = departmentVM.CreationDate,
-                    Description = departmentVM.Description,
-                });
+                var result = departmentServices.UpdateDepartment(mapper.Map<DepartmentVM,UpdatedDepartmentDto>(departmentVM));
                 if (result > 0) return RedirectToAction(nameof(Index));
                 else Message = "Department is Not Upbdated";
                 
