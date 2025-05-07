@@ -18,7 +18,7 @@ namespace IKEA.DAL.Persistance.Repositories._Generic
         public IQueryable<T> GetAll(bool WithNoTracking = true)
             => WithNoTracking ? DbContext.Set<T>().AsNoTracking() : DbContext.Set<T>();
 
-        public T? GetById(int id) => DbContext.Set<T>().Find(id);
+        public async Task<T?> GetById(int id) => await DbContext.Set<T>().FindAsync(id);
 
         public void Add(T entity)
         {

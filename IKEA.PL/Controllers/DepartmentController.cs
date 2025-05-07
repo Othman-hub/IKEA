@@ -4,6 +4,7 @@ using IKEA.BLL.Services.DepartmentServices;
 using IKEA.DAL.Models.Departments;
 using IKEA.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace IKEA.PL.Controllers
 {
@@ -26,16 +27,16 @@ namespace IKEA.PL.Controllers
 
         #region Index
         [HttpGet]
-        public IActionResult Index() => View(departmentServices.GetAllDepartments());
+        public async Task<IActionResult> Index() => View(await departmentServices.GetAllDepartments());
 
         #endregion
 
         #region Details
         [HttpGet]
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id is null) return BadRequest();
-            var department = departmentServices.GetDepartmentById(id.Value);
+            var department =await departmentServices.GetDepartmentById(id.Value);
             if (department is null) return NotFound();
             return View(department);       
         } 
@@ -47,7 +48,7 @@ namespace IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(DepartmentVM departmentVM)
+        public async Task<IActionResult> Create(DepartmentVM departmentVM)
         {
             if (!ModelState.IsValid)
                 return View(departmentVM);
@@ -55,7 +56,7 @@ namespace IKEA.PL.Controllers
             try
             {
                 
-                var Result = departmentServices.CreateDepartment(mapper.Map<DepartmentVM,CreatedDepartmenDto>(departmentVM));
+                var Result = await departmentServices.CreateDepartment(mapper.Map<DepartmentVM,CreatedDepartmenDto>(departmentVM));
                 if (Result > 0)
                     return RedirectToAction(nameof(Index));
                 else
@@ -74,10 +75,10 @@ namespace IKEA.PL.Controllers
 
         #region Update
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id is null) return BadRequest();
-            var department = departmentServices.GetDepartmentById(id.Value);
+            var department = await departmentServices.GetDepartmentById(id.Value);
             if (department is null) return NotFound();
             //var MappedDepartment = new DepartmentVM()
             //{
@@ -91,13 +92,13 @@ namespace IKEA.PL.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(DepartmentVM departmentVM)
+        public async Task<IActionResult> Edit(DepartmentVM departmentVM)
         {
             if (!ModelState.IsValid) return View(departmentVM);
             var Message = string.Empty;
             try
             {
-                var result = departmentServices.UpdateDepartment(mapper.Map<DepartmentVM,UpdatedDepartmentDto>(departmentVM));
+                var result = await departmentServices.UpdateDepartment(mapper.Map<DepartmentVM,UpdatedDepartmentDto>(departmentVM));
                 if (result > 0) return RedirectToAction(nameof(Index));
                 else Message = "Department is Not Upbdated";
                 
@@ -115,22 +116,22 @@ namespace IKEA.PL.Controllers
 
         #region Delete
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id is null) return BadRequest();
-            var department = departmentServices.GetDepartmentById(id.Value);
+            var department = await departmentServices.GetDepartmentById(id.Value);
             if (department is null) return NotFound();
 
             return View(department);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int Did)
+        public async Task<IActionResult> Delete(int Did)
         {
             var Message = string.Empty;
             try
             {
-                var IsDeleted = departmentServices.DeleteDepartment(Did);
+                var IsDeleted = await departmentServices.DeleteDepartment(Did);
                 if (IsDeleted) return RedirectToAction(nameof(Index));
                 Message = "Department is not Deleted";
             }

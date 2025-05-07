@@ -24,7 +24,7 @@ namespace IKEA.DAL.Persistance.UnitOfWork
             employeeRepositoris = new EmployeeRepsitory(this.dbContext);
         }
 
-        public int Complete()
-        => dbContext.SaveChanges();
+        public async Task<int> Complete()
+        => await dbContext.SaveChangesAsync();
     }
 }

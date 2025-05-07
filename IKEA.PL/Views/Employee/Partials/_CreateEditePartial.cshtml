@@ -1,7 +1,7 @@
 ﻿@model EmployeeVM
 @inject IDepartmentServices departmentServices
 @{
-    var Departments = new SelectList(departmentServices.GetAllDepartments(), nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+    var Departments = new SelectList(await departmentServices.GetAllDepartments(), nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
 }
 <div asp-validation-summary="ModelOnly"></div>
 <input hidden asp-for="ImageName"/>

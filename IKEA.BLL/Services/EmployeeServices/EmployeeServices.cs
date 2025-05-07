@@ -4,6 +4,7 @@ using IKEA.DAL.Models.Employees;
 using IKEA.DAL.Persistance.Repositories.Employees;
 using IKEA.DAL.Persistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace IKEA.BLL.Services.EmployeeServices
 {
@@ -19,8 +20,8 @@ namespace IKEA.BLL.Services.EmployeeServices
             this.attachmentServices = attachmentServices;
         }
 
-        public IEnumerable<EmployeeDto> GetAllEmployees(string search) =>
-            unitOfWork.employeeRepositoris.GetAll().Where(E => !E.IsDeleted &&  (string.IsNullOrEmpty(search) || E.Name.ToLower().Contains(search.ToLower()))).Include(E => E.Department).Select(E => new EmployeeDto()
+        public async Task<IEnumerable<EmployeeDto>> GetAllEmployees(string search) =>
+            await unitOfWork.employeeRepositoris.GetAll().Where(E => !E.IsDeleted &&  (string.IsNullOrEmpty(search) || E.Name.ToLower().Contains(search.ToLower()))).Include(E => E.Department).Select(E => new EmployeeDto()
             {
                 Id = E.Id,
                 Name = E.Name,
@@ -31,12 +32,12 @@ namespace IKEA.BLL.Services.EmployeeServices
                 Gender = E.Gender,
                 EmployeeType = E.EmployeeType,
                 Department = E.Department .Name ?? "N/A"
-            }).ToList();
+            }).ToListAsync();
 
 
-        public EmployeeDetailsDto? GetEmployeeById(int id)
+        public async Task<EmployeeDetailsDto?> GetEmployeeById(int id)
         {
-            var E = unitOfWork.employeeRepositoris.GetById(id);
+            var E = await unitOfWork.employeeRepositoris.GetById(id);
             if (E is not null)
                 return new EmployeeDetailsDto()
                     {
@@ -61,7 +62,7 @@ namespace IKEA.BLL.Services.EmployeeServices
             return null;
         }
 
-        public int CreateEmployee(CreatedEmployeeDto employeeDto)
+        public async Task<int> CreateEmployee(CreatedEmployeeDto employeeDto)
         {
             var Employee = new Employee()
             {
@@ -86,11 +87,11 @@ namespace IKEA.BLL.Services.EmployeeServices
                 Employee.ImageName = attachmentServices.UplodImage(employeeDto.Image, "images");
             }
             unitOfWork.employeeRepositoris.Add(Employee);
-            return unitOfWork.Complete();
+            return await unitOfWork.Complete();
         }
 
 
-        public int UpdateEmployee(UpdatedEmployeeDto employeeDto)
+        public async Task<int> UpdateEmployee(UpdatedEmployeeDto employeeDto)
         {
             var Employee = new Employee()
             {
@@ -119,12 +120,12 @@ namespace IKEA.BLL.Services.EmployeeServices
                 Employee.ImageName = attachmentServices.UplodImage(employeeDto.Image, "images");
             }
             unitOfWork.employeeRepositoris.Update(Employee);
-            return unitOfWork.Complete();
+            return await unitOfWork.Complete();
         }
 
-        public bool DeleteEmployee(int id)
+        public async Task<bool> DeleteEmployee(int id)
         {
-            var employee = unitOfWork.employeeRepositoris.GetById(id);
+            var employee = await unitOfWork.employeeRepositoris.GetById(id);
 
             if(employee is not null)
             {
@@ -132,7 +133,7 @@ namespace IKEA.BLL.Services.EmployeeServices
                     attachmentServices.DeleteImage(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", "images",employee.ImageName));
 
                 unitOfWork.employeeRepositoris.Delete(employee);
-                return unitOfWork.Complete() > 0;
+                return await unitOfWork.Complete() > 0;
             }
             return false;
         }
