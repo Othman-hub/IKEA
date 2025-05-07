@@ -53,7 +53,8 @@ namespace IKEA.PL.Controllers
                     HiringDate = employeeVM.HiringDate,
                     Gender = employeeVM.Gender,
                     EmployeeType = employeeVM.EmployeeType,
-                    DepartmentId = employeeVM.DepartmentId
+                    DepartmentId = employeeVM.DepartmentId,
+                    Image = employeeVM.Image,
                 });
                 if (Result > 0)
                     return RedirectToAction(nameof(Index));
@@ -100,7 +101,8 @@ namespace IKEA.PL.Controllers
                 EmployeeType = employee.EmployeeType,
                 IsActive = employee.IsActive,
                 Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber
+                PhoneNumber = employee.PhoneNumber,
+                ImageName = employee.ImageName
             };
             
             return View(MappedEmployee);
@@ -126,7 +128,9 @@ namespace IKEA.PL.Controllers
                     HiringDate = employeeVM.HiringDate,
                     Gender = employeeVM.Gender,
                     EmployeeType = employeeVM.EmployeeType,
-                    DepartmentId = employeeVM.DepartmentId
+                    DepartmentId = employeeVM.DepartmentId,
+                    Image = employeeVM.Image,
+                    ImageName = employeeVM.ImageName
                 });
                 if (result > 0) return RedirectToAction(nameof(Index));
                 else Message = "Employee is Not Upbdated";

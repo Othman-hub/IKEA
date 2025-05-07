@@ -6,7 +6,7 @@
 <div class="row justify-content-center align-content-center flex-column">
 
     <h1 class="col-6 my-4">Edit Employee @Model.Name.</h1>
-    <form asp-action="Edit" method="post" class="row col-6">
+    <form asp-action="Edit" method="post" class="row col-6" enctype="multipart/form-data">
         <partial name="Partials/_CreateEditePartial" model="@Model" />
 
         <div class="mt-4">
